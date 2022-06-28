@@ -254,7 +254,7 @@ addEventListener('click', (event) => {
         y: 12 * Math.sin(angle)
     }
     projectiles.push(
-        new Projectile(player.x, player.y, 5, 'white', velocity)
+        new Projectile(player.x, player.y, 5, 'green', velocity)
     )
 
 })
