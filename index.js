@@ -161,7 +161,7 @@ function spawnEnemies() {
             y: a * Math.sin(angle)
         }
         enemies.push(new Enemy(ex, ey, radius, color, velocity))
-    }, 1000)
+    }, 1500)
 }
 
 let animationId;
@@ -254,7 +254,7 @@ addEventListener('click', (event) => {
         y: 12 * Math.sin(angle)
     }
     projectiles.push(
-        new Projectile(player.x, player.y, 5, 'green', velocity)
+        new Projectile(player.x, player.y, 5, 'white', velocity)
     )
 
 })
