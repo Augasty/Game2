@@ -1,4 +1,4 @@
-const canvas = document.querySelector('canvas');
+const canvas = document.querySelector('.myCanvas');
 const c = canvas.getContext('2d')
 canvas.width = innerWidth
 canvas.height = innerHeight
@@ -10,111 +10,17 @@ const scoreElBtn = document.querySelector('#scoreElBtn')
 const startGameBtn = document.querySelector('#startGameBtn')
 const modalEl = document.querySelector('#modalEl')
 
-class Player {
-    constructor() {
-        this.speed = 4
-        this.x = canvas.width / 2
-        this.y = canvas.height / 2
-        this.velocity = { //velocity of player
-            x: 0,
-            y: 0
-        }
-        this.radius = 10
-        this.color = 'white'
-    }
-    draw() {
-        c.beginPath();
-        c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
-        c.fillStyle = this.color;
-        c.fill();
-    }
-    update() {
-        this.draw()
-        this.x += this.velocity.x
-        this.y += this.velocity.y
-    }
-}
-class Projectile {
-    constructor(x, y, radius, color, velocity) {
-        this.x = x
-        this.y = y
-        this.radius = radius
-        this.color = color
-        this.velocity = velocity
-    }
-    draw() {
-        c.beginPath();
-        c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
-        c.fillStyle = this.color;
-        c.fill();
-    }
-    update() {
-        this.draw()
-        this.x = this.x + this.velocity.x
-        this.y = this.y + this.velocity.y
-    }
-}
-
-class Enemy {
-    constructor(x, y, radius, color, velocity) {
-        this.x = x
-        this.y = y
-        this.radius = radius
-        this.color = color
-        this.velocity = velocity
-    }
-    draw() {
-        c.beginPath();
-        c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
-        c.fillStyle = this.color;
-        c.fill();
-    }
-    update() {
-        this.draw()
-        this.x = this.x + this.velocity.x
-        this.y = this.y + this.velocity.y
-    }
-}
-const friction = 0.99
-class Particle {
-    constructor(x, y, radius, color, velocity) {
-        this.x = x
-        this.y = y
-        this.radius = radius
-        this.color = color
-        this.velocity = velocity
-        this.alpha = 1
-    }
-    draw() {
-        c.save()
-        c.globalAlpha = this.alpha
-        c.beginPath();
-        c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
-        c.fillStyle = this.color;
-        c.fill();
-        this.alpha -= 0.02
-        c.restore()
-    }
-    update() {
-        this.draw()
-        this.velocity.x *= friction
-        this.velocity.y *= friction
-        this.x = this.x + this.velocity.x
-        this.y = this.y + this.velocity.y
-    }
-}
 
 // this part will be changed afterwards to create player movement 
 
 //mouse position click error calculation   event.clientX - 145, event.clientY - 32
-
+import { Player, Projectile, Enemy, Particle } from './classes.js'
 let player = new Player()
 let x = player.x
 let y = player.y
 let projectiles = []
 let enemies = []
 let particles = []
-
 
 function init() {
     player = new Player()
@@ -173,15 +79,51 @@ function animate() {
 
     //player stuffs
     player.update()
-    //player movement
+
+    //PLAYER MOVEMENT INPUTS
+
+    // INITALLY RIGHT
     if (keys.right.pressed && (player.x < canvas.width - player.radius - 50) && (player.y > player.radius + 50) && (player.y < canvas.height - player.radius - 50)) {  //player movement
-        player.velocity.x = player.speed
-    } else if (keys.left.pressed && (player.x > player.radius + 50) && (player.y > player.radius + 50) && (player.y < canvas.height - player.radius - 50)) {  //player movement
-        player.velocity.x = -player.speed
+        // right + up
+        if (keys.up.pressed && (player.y > player.radius + 50) && (player.x < canvas.width - player.radius - 50) && (player.x > player.radius + 50)) {  //player movement
+            player.velocity.y = -player.speed
+            player.velocity.x = player.speed
+        }
+        // right + down
+        else if (keys.down.pressed && (player.y < canvas.height - player.radius - 50) && (player.x < canvas.width - player.radius - 50) && (player.x > player.radius + 50)) {  //player movement
+            player.velocity.y = player.speed
+            player.velocity.x = player.speed
+        }
+        // only right
+        else {
+            player.velocity.x = player.speed
+        }
     }
+
+    // INITIALLY LEFT
+    else if (keys.left.pressed && (player.x > player.radius + 50) && (player.y > player.radius + 50) && (player.y < canvas.height - player.radius - 50)) {  //player movement
+        // left + up
+        if (keys.up.pressed && (player.y > player.radius + 50) && (player.x < canvas.width - player.radius - 50) && (player.x > player.radius + 50)) {  //player movement
+            player.velocity.y = -player.speed
+            player.velocity.x = -player.speed
+        }
+        // left + down
+        else if (keys.down.pressed && (player.y < canvas.height - player.radius - 50) && (player.x < canvas.width - player.radius - 50) && (player.x > player.radius + 50)) {  //player movement
+            player.velocity.y = player.speed
+            player.velocity.x = -player.speed
+        }
+        // only left
+        else {
+            player.velocity.x = -player.speed
+        }
+    }
+
+
     else if (keys.up.pressed && (player.y > player.radius + 50) && (player.x < canvas.width - player.radius - 50) && (player.x > player.radius + 50)) {  //player movement
         player.velocity.y = -player.speed
     }
+
+
     else if (keys.down.pressed && (player.y < canvas.height - player.radius - 50) && (player.x < canvas.width - player.radius - 50) && (player.x > player.radius + 50)) {  //player movement
         player.velocity.y = player.speed
     }

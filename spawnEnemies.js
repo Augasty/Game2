@@ -1,6 +1,6 @@
 //for generating enemies from random location. Not much fun
 
-function spawnEnemies(){
+function spawnEnemies1(){
     setInterval(()=>{
         const radius = 20*Math.random() + 5
         let ex, ey;
@@ -24,7 +24,7 @@ function spawnEnemies(){
 
 //for generating enemies from screen edges in random direction. Will be better with moveable player
 
-function spawnEnemies(){
+function spawnEnemies2(){
     setInterval(()=>{
         const radius = 20*Math.random() + 5
         let ex, ey;
@@ -48,7 +48,7 @@ function spawnEnemies(){
 
 //for generating enemies from screen edges towards the players with random velocity
 
-function spawnEnemies(){
+function spawnEnemies3(){
     setInterval(()=>{
         const radius = 20*Math.random() + 5
         let ex, ey;
